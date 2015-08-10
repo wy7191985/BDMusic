@@ -1,0 +1,232 @@
+//
+//  WYPlayingViewController.m
+//  0810-BDMusic
+//
+//  Created by yanyin on 15/8/10.
+//  Copyright (c) 2015年 yanyin. All rights reserved.
+//
+
+#import "WYPlayingViewController.h"
+#import "WYMusic.h"
+#import "WYAudioTool.h"
+#import "WYMusicTool.h"
+#import <AVFoundation/AVFoundation.h>
+
+@interface WYPlayingViewController ()
+/** 正在播放的歌曲*/
+@property (nonatomic, strong) WYMusic *playingMusic;
+/** 当前的播放器*/
+@property (nonatomic, strong) AVAudioPlayer *player;
+/** 大图*/
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+/** 歌曲名*/
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+/** 演唱者*/
+@property (weak, nonatomic) IBOutlet UILabel *singerLabel;
+/** 时长*/
+@property (weak, nonatomic) IBOutlet UILabel *timelabel;
+/** 滑块*/
+@property (weak, nonatomic) IBOutlet UIButton *slider;
+/** 进度条值*/
+@property (weak, nonatomic) IBOutlet UIView *progressView;
+/** 放大的进度条时间*/
+@property (weak, nonatomic) IBOutlet UILabel *blackTimeLabel;
+
+/** 进度定时器*/
+@property (nonatomic, strong) NSTimer *currenttimeTimer;
+
+//退下播放器
+- (IBAction)exit;
+//单击进度条
+- (IBAction)tapProgressBg:(UITapGestureRecognizer *)sender;
+
+- (IBAction)panSlider:(UIPanGestureRecognizer *)sender;
+
+
+@end
+
+@implementation WYPlayingViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+}
+
+#pragma mark - 公共方法
+/**
+ *  显示播放控制器
+ */
+- (void)show
+{
+    // 1.取得主窗口,关闭主窗口的交互
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    window.userInteractionEnabled = NO;
+    self.view.hidden = NO;  //显示view
+    // 2.添加到主窗口上
+    self.view.frame = window.bounds;
+    [window addSubview:self.view];
+    // 3.如果更换了歌曲
+    if (self.playingMusic != [WYMusicTool playingMusic]) {
+        [self resetPlayingMusic];
+    }
+    
+    
+    // 4.动画显示View
+    self.view.y = window.height;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.view.y = 0;
+    } completion:^(BOOL finished) {
+        //播放歌曲
+        [self startPlayingMusic];
+        //开始主窗口的交互
+        window.userInteractionEnabled = YES;
+        
+    }];
+    
+}
+#pragma mark - 定时器处理
+/**
+ *  添加定时器
+ */
+- (void)addCurrenttimeTimer
+{
+    
+    
+    // 1.提前调用定时器方法保证工作及时
+    [self updateCurrenttime];
+    
+    
+    self.currenttimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCurrenttime) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.currenttimeTimer forMode:NSRunLoopCommonModes];
+    
+}
+/**
+ *  销毁定时器
+ */
+- (void)removeCurrenttimeTimer
+{
+    [self.currenttimeTimer invalidate];
+    self.currenttimeTimer = nil;
+}
+
+/**
+ *  更新当前时间
+ */
+- (void)updateCurrenttime
+{
+    // 1.计算进度条值
+    double progress = self.player.currentTime / self.player.duration;
+    // 2.滑块的位置
+    self.slider.x = (self.view.width - self.slider.width) * progress;
+    // 3.设置进度条值
+    self.progressView.width = self.slider.center.x;
+    // 4.设置滑块上的当前时间
+    NSString *currentStr = [self stringWithTime:self.player.currentTime];
+    [self.slider setTitle:currentStr forState:UIControlStateNormal];
+    
+}
+
+
+#pragma mark - 音乐控制
+/**
+ *  停止歌曲
+ */
+- (void)resetPlayingMusic
+{
+    
+    // 1.还原默认界面
+    self.iconView.image = [UIImage imageNamed:@"play_cover_pic_bg"];
+    self.nameLabel.text = nil;
+    self.singerLabel.text = nil;
+    self.timelabel.text = nil;
+    self.slider.titleLabel.text = nil;
+    // 2.停止当前的歌曲
+    [WYAudioTool stopMusic:self.playingMusic.filename];
+    // 3.销毁定时器
+    [self removeCurrenttimeTimer];
+    //清空当前的播放器
+    self.player = nil;
+}
+/**
+ *  播放歌曲
+ */
+- (void)startPlayingMusic
+{
+    
+    // 1.如果正在播放歌曲,直接返回
+    if (self.playingMusic == [WYMusicTool playingMusic]) {
+        [self addCurrenttimeTimer]; //退下的时候销毁了，再上来的时候要添加
+        return;
+    }
+    // 2.存储正在播放的歌曲
+    self.playingMusic = [WYMusicTool playingMusic];
+    // 3.设置界面属性
+    self.iconView.image = [UIImage imageNamed:self.playingMusic.icon];
+    self.nameLabel.text = self.playingMusic.name;
+    self.singerLabel.text = self.playingMusic.singer;
+    
+    // 4.播放歌曲
+    self.player = [WYAudioTool playMusic:self.playingMusic.filename];
+    // 5.设置时长
+    self.timelabel.text = [self stringWithTime:self.player.duration];
+    
+    // 6.开启定时器
+    [self addCurrenttimeTimer];
+    
+}
+
+#pragma mark - 私有方法
+/**
+ *  时间长度-->时间字符串
+ */
+- (NSString *)stringWithTime:(NSTimeInterval)time
+{
+    //取整得到分钟
+    int minute = time / 60;
+    //取余得到秒
+    int second = (int)time % 60;
+    return [NSString stringWithFormat:@"%d:%02d", minute, second];
+    
+}
+
+#pragma mark - 内部控件的监听
+/**
+ *  退下控制器
+ */
+- (IBAction)exit {
+    //取得主窗口
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    //关闭主窗口的交互
+    window.userInteractionEnabled = NO;
+    //动画改编view的y值
+    [UIView animateWithDuration:0.25 animations:^{
+        self.view.y = window.height;
+    } completion:^(BOOL finished) {
+        //开始主窗口的交互
+        window.userInteractionEnabled = YES;
+        //关闭定时器
+        [self removeCurrenttimeTimer];
+        //隐藏控制器view
+        self.view.hidden = YES;
+    }];
+    
+    
+}
+/**
+ *  单击进度条
+ */
+- (IBAction)tapProgressBg:(UITapGestureRecognizer *)sender {
+    // 1.获得点击的位置
+    CGPoint point = [sender locationInView:sender.view];
+    // 2.获得点击位置的时间
+    self.player.currentTime = (point.x / sender.view.width) * self.player.duration;
+    // 3.调用定时器方法刷新时间
+    [self updateCurrenttime];
+}
+
+/**
+ *  拖拽滑块
+ */
+- (IBAction)panSlider:(UIPanGestureRecognizer *)sender {
+}
+@end

@@ -1,0 +1,20 @@
+//
+//  0810-BDMusic-Prefix.pch
+//  0810-BDMusic
+//
+//  Created by yanyin on 15/8/10.
+//  Copyright (c) 2015年 yanyin. All rights reserved.
+//
+
+#ifndef _810_BDMusic__810_BDMusic_Prefix_pch
+#define _810_BDMusic__810_BDMusic_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "UIImage+Clip.h"
+#import "UIView+Extension.h"
+
+
+
+#endif
