@@ -10,6 +10,7 @@
                 <outlet property="blackTimeLabel" destination="zbl-2t-1hA" id="iIE-Sd-kK8"/>
                 <outlet property="iconView" destination="QUB-JA-lle" id="fZL-uW-PxR"/>
                 <outlet property="nameLabel" destination="mUv-A7-KXh" id="bsy-4O-hwb"/>
+                <outlet property="playOrPauseBtn" destination="BWc-6W-r7v" id="Pkj-rP-E4d"/>
                 <outlet property="progressView" destination="hgl-Sd-pAj" id="DRS-xb-rO4"/>
                 <outlet property="singerLabel" destination="gBE-Nh-ZMz" id="ajt-2y-YO3"/>
                 <outlet property="slider" destination="Jcv-dt-cff" id="dw8-b2-Sjt"/>
@@ -122,6 +123,9 @@
                             <state key="normal" image="previous">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="previousMusic" destination="-1" eventType="touchUpInside" id="rKI-Hk-sEX"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BWc-6W-r7v" userLabel="play">
                             <rect key="frame" x="124" y="27" width="72" height="46"/>
@@ -132,7 +136,10 @@
                             <state key="normal" backgroundImage="play">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="selected" image="pause"/>
+                            <state key="selected" backgroundImage="pause"/>
+                            <connections>
+                                <action selector="playOrPause:" destination="-1" eventType="touchUpInside" id="946-TC-Mei"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RpC-Dk-kYK" userLabel="next">
                             <rect key="frame" x="226" y="27" width="41" height="46"/>
@@ -143,6 +150,9 @@
                             <state key="normal" image="next">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="nextMusic" destination="-1" eventType="touchUpInside" id="uuP-Lx-mt5"/>
+                            </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Slw-Qt-Y2T" userLabel="进度条">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="10"/>

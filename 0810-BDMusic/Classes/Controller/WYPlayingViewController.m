@@ -31,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UIView *progressView;
 /** 放大的进度条时间*/
 @property (weak, nonatomic) IBOutlet UILabel *blackTimeLabel;
+/** 播放暂停按钮*/
+@property (weak, nonatomic) IBOutlet UIButton *playOrPauseBtn;
 
 /** 进度定时器*/
 @property (nonatomic, strong) NSTimer *currenttimeTimer;
@@ -39,10 +41,14 @@
 - (IBAction)exit;
 //单击进度条
 - (IBAction)tapProgressBg:(UITapGestureRecognizer *)sender;
-
+//拖拽滑块
 - (IBAction)panSlider:(UIPanGestureRecognizer *)sender;
-
-
+//上一首
+- (IBAction)previousMusic;
+//播放和暂停
+- (IBAction)playOrPause:(UIButton *)sender;
+//下一首
+- (IBAction)nextMusic;
 @end
 
 @implementation WYPlayingViewController
@@ -133,7 +139,7 @@
 
 #pragma mark - 音乐控制
 /**
- *  停止歌曲
+ *  重置歌曲
  */
 - (void)resetPlayingMusic
 {
@@ -144,6 +150,7 @@
     self.singerLabel.text = nil;
     self.timelabel.text = nil;
     self.slider.titleLabel.text = nil;
+    self.playOrPauseBtn.selected = NO; //设置按钮不选中
     // 2.停止当前的歌曲
     [WYAudioTool stopMusic:self.playingMusic.filename];
     // 3.销毁定时器
@@ -168,6 +175,7 @@
     self.iconView.image = [UIImage imageNamed:self.playingMusic.icon];
     self.nameLabel.text = self.playingMusic.name;
     self.singerLabel.text = self.playingMusic.singer;
+    self.playOrPauseBtn.selected = YES; //设置按钮选中
     
     // 4.播放歌曲
     self.player = [WYAudioTool playMusic:self.playingMusic.filename];
@@ -265,16 +273,71 @@
         //显示放大的当前时间
         self.blackTimeLabel.hidden = NO;
     } else if (sender.state == UIGestureRecognizerStateEnded) { //停止拖拽
-        //设置播放器的当前时间
+        // 1.设置播放器的当前时间(一定要在开启定时器前)
         self.player.currentTime = time;
-        //开启定时器
+        // 2.开启定时器
         [self addCurrenttimeTimer];
         
-        //隐藏放大的当前时间
+        // 3.隐藏放大的当前时间
         self.blackTimeLabel.hidden = YES;
         
     }
     
+}
+/**
+ *  上一首
+ */
+- (IBAction)previousMusic {
+    // 1.取得主窗口,关闭主窗口的交互
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    window.userInteractionEnabled = NO;
+    // 2.重置歌曲
+    [self resetPlayingMusic];
+    // 3.设置上一首歌曲为当前歌曲
+    [WYMusicTool setPlayingMusic:[WYMusicTool previousMusic]];
+    // 4.播放歌曲
+    [self startPlayingMusic];
+    // 5.开启主窗口的交互
+    window.userInteractionEnabled = YES;
+}
+/**
+ *  播放和暂停
+ */
+- (IBAction)playOrPause:(UIButton *)sender {
+    if (sender.selected == NO) {  //开始播放
+        sender.selected = YES;
+        //播放歌曲
+        [WYAudioTool playMusic:self.playingMusic.filename];
+        //添加定时器
+        [self addCurrenttimeTimer];
+    } else if (sender.selected) { //暂停
+        sender.selected = NO;
+        //暂停
+        [WYAudioTool pauseMusic:self.playingMusic.filename];
+        //销毁定时器
+        [self removeCurrenttimeTimer];
+        
+    }
+    
+    
+    
+}
+/**
+ *  下一首
+ */
+- (IBAction)nextMusic {
+    
+    // 1.取得主窗口,关闭主窗口的交互
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    window.userInteractionEnabled = NO;
+    // 2.重置歌曲
+    [self resetPlayingMusic];
+    // 3.设置下一首歌曲为当前歌曲
+    [WYMusicTool setPlayingMusic:[WYMusicTool nextMusic]];
+    // 4.播放歌曲
+    [self startPlayingMusic];
+    // 5.开启主窗口的交互
+    window.userInteractionEnabled = YES;
     
     
     
