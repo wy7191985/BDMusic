@@ -49,7 +49,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    // 设置放大当前时间的label圆角
+    self.blackTimeLabel.layer.cornerRadius = 5;
+    self.blackTimeLabel.clipsToBounds = YES;
 }
 
 #pragma mark - 公共方法
@@ -90,7 +92,9 @@
  */
 - (void)addCurrenttimeTimer
 {
+    if (self.player.isPlaying == NO) return;
     
+    [self removeCurrenttimeTimer];
     
     // 1.提前调用定时器方法保证工作及时
     [self updateCurrenttime];
@@ -228,5 +232,52 @@
  *  拖拽滑块
  */
 - (IBAction)panSlider:(UIPanGestureRecognizer *)sender {
+    // 1.获得拖拽的位置
+    CGPoint point = [sender locationInView:sender.view];
+    // 2.设置每次返回的位置都从零开始计算
+    [sender setTranslation:CGPointZero inView:sender.view];
+    // 3.设置滑块的位置
+    CGFloat sliderMaxX = self.view.width - self.slider.width;
+    self.slider.x += point.x;
+    if (self.slider.x < 0) {
+        self.slider.x = 0;
+    } else if (self.slider.x > sliderMaxX) {
+        self.slider.x = sliderMaxX;
+    }
+    // 4.设置进度条值的位置
+    self.progressView.width = self.slider.center.x;
+    // 5.设置滑块上的时间
+    double progress = self.slider.x / sliderMaxX;
+    NSTimeInterval time = self.player.duration * progress;
+    [self.slider setTitle:[self stringWithTime:time] forState:UIControlStateNormal];
+    // 6.设置放大当前时间label的时间(因为没有被约束,所以要设置它的位置)
+    self.blackTimeLabel.x = self.slider.x;
+    self.blackTimeLabel.y = 10;
+    self.blackTimeLabel.text = [self stringWithTime:time];
+    
+    
+    
+    
+    // 判断拖拽的状态
+    if (sender.state == UIGestureRecognizerStateBegan) { //正在拖拽
+        //关闭定时器
+        [self removeCurrenttimeTimer];
+        //显示放大的当前时间
+        self.blackTimeLabel.hidden = NO;
+    } else if (sender.state == UIGestureRecognizerStateEnded) { //停止拖拽
+        //设置播放器的当前时间
+        self.player.currentTime = time;
+        //开启定时器
+        [self addCurrenttimeTimer];
+        
+        //隐藏放大的当前时间
+        self.blackTimeLabel.hidden = YES;
+        
+    }
+    
+    
+    
+    
+    
 }
 @end
