@@ -98,8 +98,9 @@
  */
 - (void)addCurrenttimeTimer
 {
+    //如果没有在播放歌曲就直接返回(比如拖拽滑块结束会添加一下定时器)
     if (self.player.isPlaying == NO) return;
-    
+    // 不管如何，在添加定时器前销毁以前的定时器，保证只有一个
     [self removeCurrenttimeTimer];
     
     // 1.提前调用定时器方法保证工作及时
