@@ -18,6 +18,13 @@ static NSMutableDictionary *_soundIDs;
 + (void)initialize
 {
     _soundIDs = [NSMutableDictionary dictionary];
+    
+    //音乐会话
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    //设置会话类型（播放类型、模式）自动停止其他播放器
+    [session setCategory:AVAudioSessionCategoryAmbient error:nil];
+    //激活会话
+    [session setActive:YES error:nil];
 }
 /**
  *  播放音效

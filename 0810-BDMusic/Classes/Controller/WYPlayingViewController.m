@@ -12,7 +12,7 @@
 #import "WYMusicTool.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface WYPlayingViewController ()
+@interface WYPlayingViewController () <AVAudioPlayerDelegate>
 /** 正在播放的歌曲*/
 @property (nonatomic, strong) WYMusic *playingMusic;
 /** 当前的播放器*/
@@ -180,6 +180,7 @@
     
     // 4.播放歌曲
     self.player = [WYAudioTool playMusic:self.playingMusic.filename];
+    self.player.delegate = self; // 设置播放器的代理
     // 5.设置时长
     self.timelabel.text = [self stringWithTime:self.player.duration];
     
@@ -320,8 +321,6 @@
         
     }
     
-    
-    
 }
 /**
  *  下一首
@@ -339,9 +338,27 @@
     [self startPlayingMusic];
     // 5.开启主窗口的交互
     window.userInteractionEnabled = YES;
+}
+
+#pragma mark - AVAudioPlayerDelegate
+/**
+ *  播放完毕时会调用
+ */
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    //调用下一首按钮的点击方法
+    [self nextMusic];
     
-    
-    
+}
+
+/**
+ *  播放被打断时会调用
+ */
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player
+{
+    if ([player isPlaying]) {  //如果正在播放歌曲,就点击一下暂停
+        [self playOrPause:self.playOrPauseBtn];
+    }
     
 }
 @end
