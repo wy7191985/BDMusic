@@ -10,11 +10,12 @@
 
 @interface UIImage (Clip)
 /**
- *  创建一个带圆环的图片
- *
- *  @param name    传入的图片名
- *  @param padding 圆环的宽度
- */
+*  创建一个带圆环的图片
+*
+*  @param name    传入的图片名
+*  @param padding 圆环的宽度
+*  @param color   圆环的颜色
+*/
 + (instancetype)clipImageWithName:(NSString *)name andPadding:(CGFloat)padding color:(UIColor *)color;
 
 @end

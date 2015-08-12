@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		896982B81B7B99120049382E /* DRNRealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896982B51B7B99120049382E /* DRNRealTimeBlurView.m */; };
+		896982B91B7B99120049382E /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 896982B71B7B99120049382E /* UIImage+BoxBlur.m */; };
+		896982BC1B7B9E6F0049382E /* WYLyricView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896982BB1B7B9E6F0049382E /* WYLyricView.m */; };
+		896982BF1B7BA5B10049382E /* WYLrcLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 896982BE1B7BA5B10049382E /* WYLrcLine.m */; };
 		BA6ADB0D1B782D6F00A34EB3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA6ADB0B1B782D6F00A34EB3 /* Main.storyboard */; };
 		BA6ADB0F1B782D6F00A34EB3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA6ADB0E1B782D6F00A34EB3 /* Images.xcassets */; };
 		BA6ADB1E1B782D6F00A34EB3 /* _810_BDMusicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6ADB1D1B782D6F00A34EB3 /* _810_BDMusicTests.m */; };
@@ -79,6 +83,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		896982B41B7B99120049382E /* DRNRealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRNRealTimeBlurView.h; sourceTree = "<group>"; };
+		896982B51B7B99120049382E /* DRNRealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRNRealTimeBlurView.m; sourceTree = "<group>"; };
+		896982B61B7B99120049382E /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
+		896982B71B7B99120049382E /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
+		896982BA1B7B9E6F0049382E /* WYLyricView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WYLyricView.h; sourceTree = "<group>"; };
+		896982BB1B7B9E6F0049382E /* WYLyricView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WYLyricView.m; sourceTree = "<group>"; };
+		896982BD1B7BA5B10049382E /* WYLrcLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WYLrcLine.h; sourceTree = "<group>"; };
+		896982BE1B7BA5B10049382E /* WYLrcLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WYLrcLine.m; sourceTree = "<group>"; };
 		BA6ADAFE1B782D6F00A34EB3 /* 0810-BDMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "0810-BDMusic.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA6ADB021B782D6F00A34EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA6ADB0C1B782D6F00A34EB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -181,6 +193,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		896982B31B7B99120049382E /* DRNRealTimeBlur */ = {
+			isa = PBXGroup;
+			children = (
+				896982B41B7B99120049382E /* DRNRealTimeBlurView.h */,
+				896982B51B7B99120049382E /* DRNRealTimeBlurView.m */,
+				896982B61B7B99120049382E /* UIImage+BoxBlur.h */,
+				896982B71B7B99120049382E /* UIImage+BoxBlur.m */,
+			);
+			path = DRNRealTimeBlur;
+			sourceTree = "<group>";
+		};
 		BA6ADAF51B782D6F00A34EB3 = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +288,8 @@
 			children = (
 				BA6ADB821B782FB400A34EB3 /* WYMusic.h */,
 				BA6ADB831B782FB400A34EB3 /* WYMusic.m */,
+				896982BD1B7BA5B10049382E /* WYLrcLine.h */,
+				896982BE1B7BA5B10049382E /* WYLrcLine.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -296,6 +321,7 @@
 		BA6ADB2E1B782E0C00A34EB3 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				896982B31B7B99120049382E /* DRNRealTimeBlur */,
 				BA6ADBB01B78375D00A34EB3 /* MJExtension */,
 			);
 			path = Lib;
@@ -306,6 +332,8 @@
 			children = (
 				BA6ADBD11B78392B00A34EB3 /* WYMusicCell.h */,
 				BA6ADBD21B78392B00A34EB3 /* WYMusicCell.m */,
+				896982BA1B7B9E6F0049382E /* WYLyricView.h */,
+				896982BB1B7B9E6F0049382E /* WYLyricView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -555,12 +583,14 @@
 				BA6ADBCC1B7837D900A34EB3 /* UIImage+Clip.m in Sources */,
 				BA6ADBC51B78375D00A34EB3 /* MJType.m in Sources */,
 				BA6ADBC31B78375D00A34EB3 /* MJFoundation.m in Sources */,
+				896982B81B7B99120049382E /* DRNRealTimeBlurView.m in Sources */,
 				BA6ADB8B1B78310400A34EB3 /* WYPlayingViewController.m in Sources */,
 				BA6ADBD61B783F8900A34EB3 /* UIView+Extension.m in Sources */,
 				BA6ADBC71B78375D00A34EB3 /* NSObject+MJKeyValue.m in Sources */,
 				BA6ADBC61B78375D00A34EB3 /* NSObject+MJCoding.m in Sources */,
 				BA6ADBC91B78375D00A34EB3 /* NSString+MJExtension.m in Sources */,
 				BA6ADBD91B7879AC00A34EB3 /* WYMusicTool.m in Sources */,
+				896982BF1B7BA5B10049382E /* WYLrcLine.m in Sources */,
 				BA6ADBC41B78375D00A34EB3 /* MJProperty.m in Sources */,
 				BA6ADBD31B78392B00A34EB3 /* WYMusicCell.m in Sources */,
 				BA6ADBC81B78375D00A34EB3 /* NSObject+MJProperty.m in Sources */,
@@ -568,6 +598,8 @@
 				BA6ADB871B7830D800A34EB3 /* WYMusicViewController.m in Sources */,
 				BA6ADBD01B7837F700A34EB3 /* WYAudioTool.m in Sources */,
 				BA6ADBC21B78375D00A34EB3 /* MJExtensionConst.m in Sources */,
+				896982B91B7B99120049382E /* UIImage+BoxBlur.m in Sources */,
+				896982BC1B7B9E6F0049382E /* WYLyricView.m in Sources */,
 				BA6ADB311B782E0C00A34EB3 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -763,6 +795,7 @@
 				BA6ADB231B782D6F00A34EB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BA6ADB241B782D6F00A34EB3 /* Build configuration list for PBXNativeTarget "0810-BDMusicTests" */ = {
 			isa = XCConfigurationList;
@@ -771,6 +804,7 @@
 				BA6ADB261B782D6F00A34EB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

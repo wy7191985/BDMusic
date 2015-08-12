@@ -11,6 +11,7 @@
 #import "WYAudioTool.h"
 #import "WYMusicTool.h"
 #import <AVFoundation/AVFoundation.h>
+#import "WYLyricView.h"
 
 @interface WYPlayingViewController () <AVAudioPlayerDelegate>
 /** 正在播放的歌曲*/
@@ -33,12 +34,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *blackTimeLabel;
 /** 播放暂停按钮*/
 @property (weak, nonatomic) IBOutlet UIButton *playOrPauseBtn;
+/** 显示歌词的视图*/
+@property (weak, nonatomic) IBOutlet WYLyricView *lyricView;
 
 /** 进度定时器*/
 @property (nonatomic, strong) NSTimer *currenttimeTimer;
 
 //退下播放器
 - (IBAction)exit;
+//切换歌词封面
+- (IBAction)lyricOrpic:(UIButton *)sender;
+
 //单击进度条
 - (IBAction)tapProgressBg:(UITapGestureRecognizer *)sender;
 //拖拽滑块
@@ -186,6 +192,8 @@
     
     // 6.开启定时器
     [self addCurrenttimeTimer];
+    // 7.切换歌词
+    self.lyricView.lrcname = self.playingMusic.lrcname;
     
 }
 
@@ -225,6 +233,22 @@
     }];
     
     
+}
+/**
+ *  切换歌词封面
+ */
+- (IBAction)lyricOrpic:(UIButton *)sender {
+    if (self.lyricView.hidden) {  //要显示歌词
+        // 1.显示歌词
+        self.lyricView.hidden = NO;
+        // 2.设置按钮选中
+        sender.selected = YES;
+    } else {
+        // 1.隐藏歌词
+        self.lyricView.hidden = YES;
+        // 2.取消按钮选中
+        sender.selected = NO;
+    }
 }
 /**
  *  单击进度条

@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="blackTimeLabel" destination="zbl-2t-1hA" id="iIE-Sd-kK8"/>
                 <outlet property="iconView" destination="QUB-JA-lle" id="fZL-uW-PxR"/>
+                <outlet property="lyricView" destination="DCR-xL-Zpf" id="6iY-FS-PN3"/>
                 <outlet property="nameLabel" destination="mUv-A7-KXh" id="bsy-4O-hwb"/>
                 <outlet property="playOrPauseBtn" destination="BWc-6W-r7v" id="Pkj-rP-E4d"/>
                 <outlet property="progressView" destination="hgl-Sd-pAj" id="DRS-xb-rO4"/>
@@ -29,6 +30,10 @@
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play_cover_pic_bg" translatesAutoresizingMaskIntoConstraints="NO" id="QUB-JA-lle" userLabel="歌曲封面">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="468"/>
                         </imageView>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DCR-xL-Zpf" userLabel="歌词View" customClass="WYLyricView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="468"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BVg-BX-vuR" userLabel="名字背景">
                             <rect key="frame" x="0.0" y="418" width="320" height="50"/>
                             <subviews>
@@ -84,7 +89,7 @@
                                 <action selector="exit" destination="-1" eventType="touchUpInside" id="m8z-QG-Pbw"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0mz-We-AWn" userLabel="词图">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0mz-We-AWn" userLabel="词图">
                             <rect key="frame" x="249" y="70" width="41" height="48"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="41" id="GN6-47-OdA"/>
@@ -94,21 +99,28 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="selected" backgroundImage="pic_normal"/>
+                            <connections>
+                                <action selector="lyricOrpic:" destination="-1" eventType="touchUpInside" id="6O3-17-Vab"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.80000007149999997" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="BVg-BX-vuR" secondAttribute="bottom" id="2Sb-YA-egp"/>
                         <constraint firstItem="L3K-P2-ig8" firstAttribute="leading" secondItem="RcE-Se-FKY" secondAttribute="leading" constant="30" id="3GA-tB-QNB"/>
+                        <constraint firstItem="DCR-xL-Zpf" firstAttribute="top" secondItem="RcE-Se-FKY" secondAttribute="top" id="4yV-lg-3mL"/>
+                        <constraint firstAttribute="trailing" secondItem="DCR-xL-Zpf" secondAttribute="trailing" id="G0q-1J-5Vr"/>
                         <constraint firstAttribute="trailing" secondItem="0mz-We-AWn" secondAttribute="trailing" constant="30" id="IRK-PX-M2u"/>
                         <constraint firstAttribute="trailing" secondItem="QUB-JA-lle" secondAttribute="trailing" id="U6h-bY-SNH"/>
                         <constraint firstItem="BVg-BX-vuR" firstAttribute="leading" secondItem="RcE-Se-FKY" secondAttribute="leading" id="VW2-eh-TMi"/>
+                        <constraint firstAttribute="bottom" secondItem="DCR-xL-Zpf" secondAttribute="bottom" id="X0O-fp-J8P"/>
                         <constraint firstAttribute="trailing" secondItem="BVg-BX-vuR" secondAttribute="trailing" id="aWQ-GW-Pey"/>
                         <constraint firstItem="L3K-P2-ig8" firstAttribute="top" secondItem="RcE-Se-FKY" secondAttribute="top" constant="70" id="c2y-Zm-qsM"/>
                         <constraint firstItem="QUB-JA-lle" firstAttribute="top" secondItem="RcE-Se-FKY" secondAttribute="top" id="iDi-Hm-2IZ"/>
                         <constraint firstAttribute="bottom" secondItem="QUB-JA-lle" secondAttribute="bottom" id="ldw-R6-lik"/>
                         <constraint firstItem="QUB-JA-lle" firstAttribute="leading" secondItem="RcE-Se-FKY" secondAttribute="leading" id="uHN-JE-ihX"/>
                         <constraint firstItem="0mz-We-AWn" firstAttribute="top" secondItem="RcE-Se-FKY" secondAttribute="top" constant="70" id="wPw-ia-WPM"/>
+                        <constraint firstItem="DCR-xL-Zpf" firstAttribute="leading" secondItem="RcE-Se-FKY" secondAttribute="leading" id="wes-wE-1s3"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JxJ-kE-2Tb" userLabel="底部View">
@@ -232,7 +244,7 @@
                 <constraint firstAttribute="trailing" secondItem="JxJ-kE-2Tb" secondAttribute="trailing" id="Xtt-Iy-j9L"/>
                 <constraint firstAttribute="trailing" secondItem="RcE-Se-FKY" secondAttribute="trailing" id="izp-dR-KVJ"/>
             </constraints>
-            <point key="canvasLocation" x="170" y="488"/>
+            <point key="canvasLocation" x="75" y="507"/>
         </view>
         <tapGestureRecognizer id="e56-RJ-bff">
             <connections>
