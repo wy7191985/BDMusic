@@ -201,7 +201,7 @@
                                 <outletCollection property="gestureRecognizers" destination="e56-RJ-bff" appends="YES" id="pO5-AW-vsM"/>
                             </connections>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jcv-dt-cff" userLabel="滑块">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jcv-dt-cff" userLabel="滑块">
                             <rect key="frame" x="0.0" y="-5" width="41" height="21"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
@@ -244,7 +244,7 @@
                 <constraint firstAttribute="trailing" secondItem="JxJ-kE-2Tb" secondAttribute="trailing" id="Xtt-Iy-j9L"/>
                 <constraint firstAttribute="trailing" secondItem="RcE-Se-FKY" secondAttribute="trailing" id="izp-dR-KVJ"/>
             </constraints>
-            <point key="canvasLocation" x="75" y="507"/>
+            <point key="canvasLocation" x="181" y="345"/>
         </view>
         <tapGestureRecognizer id="e56-RJ-bff">
             <connections>

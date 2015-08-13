@@ -37,8 +37,11 @@
 /** 显示歌词的视图*/
 @property (weak, nonatomic) IBOutlet WYLyricView *lyricView;
 
+
 /** 进度定时器*/
 @property (nonatomic, strong) NSTimer *currenttimeTimer;
+/** 歌词定时器*/
+@property (nonatomic, strong) CADisplayLink *lrcTimer;
 
 //退下播放器
 - (IBAction)exit;
@@ -142,7 +145,40 @@
     [self.slider setTitle:currentStr forState:UIControlStateNormal];
     
 }
-
+/**
+ *  添加歌词定时器
+ */
+- (void)addLrcTimer
+{
+    //如果没有在播放歌曲活着歌词视图隐藏时返回
+    if (self.player.isPlaying == NO || self.lyricView.hidden) return;
+    // 不管如何，在添加定时器前销毁以前的定时器，保证只有一个
+    [self removeLrcTimer];
+    
+    // 1.提前调用定时器方法保证工作及时
+    [self updateLrc];
+    
+    
+    self.lrcTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrc)];
+    [self.lrcTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    
+}
+/**
+ *  销毁歌词定时器
+ */
+- (void)removeLrcTimer
+{
+    [self.lrcTimer invalidate];
+    self.lrcTimer = nil;
+}
+/**
+ *  更新歌词
+ */
+- (void)updateLrc
+{
+    self.lyricView.currentTime = self.player.currentTime;
+    
+}
 
 #pragma mark - 音乐控制
 /**
@@ -162,6 +198,7 @@
     [WYAudioTool stopMusic:self.playingMusic.filename];
     // 3.销毁定时器
     [self removeCurrenttimeTimer];
+    [self removeLrcTimer];
     //清空当前的播放器
     self.player = nil;
 }
@@ -174,6 +211,7 @@
     // 1.如果正在播放歌曲,直接返回
     if (self.playingMusic == [WYMusicTool playingMusic]) {
         [self addCurrenttimeTimer]; //退下的时候销毁了，再上来的时候要添加
+        [self addLrcTimer];
         return;
     }
     // 2.存储正在播放的歌曲
@@ -192,6 +230,7 @@
     
     // 6.开启定时器
     [self addCurrenttimeTimer];
+    [self addLrcTimer];
     // 7.切换歌词
     self.lyricView.lrcname = self.playingMusic.lrcname;
     
@@ -228,6 +267,7 @@
         window.userInteractionEnabled = YES;
         //关闭定时器
         [self removeCurrenttimeTimer];
+        [self removeLrcTimer];
         //隐藏控制器view
         self.view.hidden = YES;
     }];
@@ -243,11 +283,15 @@
         self.lyricView.hidden = NO;
         // 2.设置按钮选中
         sender.selected = YES;
+        // 3.开启定时器
+        [self addLrcTimer];
     } else {
         // 1.隐藏歌词
         self.lyricView.hidden = YES;
         // 2.取消按钮选中
         sender.selected = NO;
+        // 3.销毁定时器
+        [self removeLrcTimer];
     }
 }
 /**
@@ -336,12 +380,14 @@
         [WYAudioTool playMusic:self.playingMusic.filename];
         //添加定时器
         [self addCurrenttimeTimer];
+        [self addLrcTimer];
     } else if (sender.selected) { //暂停
         sender.selected = NO;
         //暂停
         [WYAudioTool pauseMusic:self.playingMusic.filename];
         //销毁定时器
         [self removeCurrenttimeTimer];
+        [self removeLrcTimer];
         
     }
     
@@ -376,7 +422,7 @@
 }
 
 /**
- *  播放被打断时会调用
+ *  播放被打断时会调用(比如来电)
  */
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player
 {

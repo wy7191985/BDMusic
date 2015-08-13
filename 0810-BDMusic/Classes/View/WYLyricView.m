@@ -8,14 +8,17 @@
 
 #import "WYLyricView.h"
 #import "WYLrcLine.h"
+#import "WYLyricCell.h"
 
 @interface WYLyricView () <UITableViewDataSource, UITableViewDelegate>
 /**存放歌词的tableView*/
 @property (nonatomic, strong) UITableView *tableView;
 /** 存放每一行歌词模型数组*/
 @property (nonatomic, strong) NSMutableArray *lines;
-
-
+/** 当前行的时间(相比下一条是前一条)*/
+@property (nonatomic, copy) NSString *currentLineTime;
+/** 当前行的索引*/
+@property (nonatomic, assign) int currentIndex;
 
 @end
 
@@ -61,15 +64,18 @@
     [self addSubview:tableView];
     self.tableView = tableView;
     
+    
 }
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     //设置tableView的frame
     self.tableView.frame = self.bounds;
+    //设置tableView的内边距
+    self.tableView.contentInset = UIEdgeInsetsMake(self.height * 0.5, 0, self.height * 0.5, 0);
 }
 
-//重写set方法
+//重写歌词set方法
 - (void)setLrcname:(NSString *)lrcname
 {
     _lrcname = [lrcname copy];
@@ -108,6 +114,44 @@
     [self.tableView reloadData];
     
 }
+//重写当前时间的set方法
+- (void)setCurrentTime:(NSTimeInterval)currentTime
+{
+    _currentTime = currentTime;
+    // 计算时间
+    int minute = currentTime / 60;
+    int second = (int)currentTime % 60;
+    int msecond = (currentTime - (int)currentTime) * 100;
+    NSString *currentTimeStr = [NSString stringWithFormat:@"%02d:%02d.%02d", minute, second, msecond];
+    // 遍历歌词模型数组
+    NSUInteger count = self.lines.count;
+    for (int index = 0; index < count; index++) {
+        WYLrcLine *line = self.lines[index];
+        //设置当前行时间
+        self.currentLineTime = line.time;
+        //下一个时间
+        NSString *nextLineTime = nil;
+        int nextIndex = index + 1;
+        if (nextIndex < count) {
+            WYLrcLine *nextLine = self.lines[nextIndex];
+            nextLineTime = nextLine.time;
+        }
+        //判断是否为正在播放的歌词(当前时间大于等于当前歌词时间，小于下一条歌词时间，且不是相同时间的歌词)
+        if ([currentTimeStr compare:self.currentLineTime] != NSOrderedAscending && [self.currentLineTime compare:nextLineTime] == NSOrderedAscending && self.currentIndex != index) {
+            //刷新上一行和当前行歌词
+            NSArray *reloadRows = @[[NSIndexPath indexPathForRow:self.currentIndex inSection:0], [NSIndexPath indexPathForRow:index inSection:0]];
+            //赋值当前歌词索引
+            self.currentIndex = index;
+            [self.tableView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
+            //滚动到对应的行
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+        
+        
+        
+    }
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -116,14 +160,10 @@
     return self.lines.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *ID = @"lrc";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-    }
+    WYLyricCell *cell = [WYLyricCell cellWithTableView:tableView];
     
     WYLrcLine *line = self.lines[indexPath.row];
-    cell.textLabel.text = line.word;
+    cell.line = line;
     
     return cell;
 }
