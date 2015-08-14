@@ -58,12 +58,16 @@
 
 - (void)setup
 {
+    //添加tableview
     UITableView *tableView = [[UITableView alloc] init];
     tableView.dataSource = self;
     tableView.delegate = self;
     [self addSubview:tableView];
     self.tableView = tableView;
-    
+    //设置tableView属性
+    tableView.backgroundColor = [UIColor clearColor];
+    //去除分割线
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
 }
 - (void)layoutSubviews
@@ -117,6 +121,10 @@
 //重写当前时间的set方法
 - (void)setCurrentTime:(NSTimeInterval)currentTime
 {
+    //当用户往回拖进度条,设置从头开始遍历
+    if (currentTime < _currentTime) {
+        self.currentIndex = - 1;
+    }
     _currentTime = currentTime;
     // 计算时间
     int minute = currentTime / 60;
@@ -125,7 +133,8 @@
     NSString *currentTimeStr = [NSString stringWithFormat:@"%02d:%02d.%02d", minute, second, msecond];
     // 遍历歌词模型数组
     NSUInteger count = self.lines.count;
-    for (int index = 0; index < count; index++) {
+    //每次都从下一条歌词开始遍历(不这么写会出现一些bug)
+    for (int index = self.currentIndex + 1; index < count; index++) {
         WYLrcLine *line = self.lines[index];
         //设置当前行时间
         self.currentLineTime = line.time;
@@ -164,6 +173,12 @@
     
     WYLrcLine *line = self.lines[indexPath.row];
     cell.line = line;
+    //设置当前时间歌词字体
+    if (self.currentIndex == indexPath.row) {
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+    } else {
+        cell.textLabel.font = [UIFont systemFontOfSize:15];
+    }
     
     return cell;
 }

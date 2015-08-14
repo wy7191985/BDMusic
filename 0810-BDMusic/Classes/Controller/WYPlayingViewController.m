@@ -117,7 +117,7 @@
     
     
     self.currenttimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCurrenttime) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:self.currenttimeTimer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop mainRunLoop] addTimer:self.currenttimeTimer forMode:NSRunLoopCommonModes];
     
 }
 /**
@@ -160,7 +160,7 @@
     
     
     self.lrcTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrc)];
-    [self.lrcTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    [self.lrcTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
 }
 /**
