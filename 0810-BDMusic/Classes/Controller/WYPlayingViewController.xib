@@ -167,7 +167,7 @@
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Slw-Qt-Y2T" userLabel="进度条">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="10"/>
+                            <rect key="frame" x="0.0" y="5" width="320" height="10"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vf9-XB-pyL" userLabel="时长">
                                     <rect key="frame" x="278" y="0.0" width="42" height="10"/>
@@ -201,13 +201,9 @@
                                 <outletCollection property="gestureRecognizers" destination="e56-RJ-bff" appends="YES" id="pO5-AW-vsM"/>
                             </connections>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jcv-dt-cff" userLabel="滑块">
-                            <rect key="frame" x="0.0" y="-5" width="41" height="21"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jcv-dt-cff" userLabel="滑块">
+                            <rect key="frame" x="0.0" y="0.0" width="41" height="21"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="21" id="9gV-cx-Zg9"/>
-                                <constraint firstAttribute="width" constant="41" id="i0B-yb-NKb"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                             <state key="normal" backgroundImage="process_thumb">
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -225,11 +221,9 @@
                         <constraint firstAttribute="trailing" secondItem="Slw-Qt-Y2T" secondAttribute="trailing" id="AUr-uK-QqL"/>
                         <constraint firstItem="BWc-6W-r7v" firstAttribute="top" secondItem="Aqx-NN-n9J" secondAttribute="top" id="EX1-9J-IZh"/>
                         <constraint firstItem="RpC-Dk-kYK" firstAttribute="leading" secondItem="BWc-6W-r7v" secondAttribute="trailing" constant="30" id="Iid-Zd-qFY"/>
-                        <constraint firstItem="Slw-Qt-Y2T" firstAttribute="top" secondItem="JxJ-kE-2Tb" secondAttribute="top" id="MtX-ze-Ogj"/>
+                        <constraint firstItem="Slw-Qt-Y2T" firstAttribute="top" secondItem="JxJ-kE-2Tb" secondAttribute="top" constant="5" id="MtX-ze-Ogj"/>
                         <constraint firstItem="BWc-6W-r7v" firstAttribute="leading" secondItem="Aqx-NN-n9J" secondAttribute="trailing" constant="30" id="QCt-2t-H4w"/>
-                        <constraint firstItem="Jcv-dt-cff" firstAttribute="leading" secondItem="JxJ-kE-2Tb" secondAttribute="leading" id="ZZZ-oN-xnl"/>
                         <constraint firstItem="Slw-Qt-Y2T" firstAttribute="leading" secondItem="JxJ-kE-2Tb" secondAttribute="leading" id="a9R-nW-75k"/>
-                        <constraint firstItem="Jcv-dt-cff" firstAttribute="centerY" secondItem="Slw-Qt-Y2T" secondAttribute="centerY" id="cgf-uB-Vlu"/>
                         <constraint firstItem="BWc-6W-r7v" firstAttribute="top" secondItem="RpC-Dk-kYK" secondAttribute="top" id="dvf-dG-YAO"/>
                         <constraint firstAttribute="centerY" secondItem="BWc-6W-r7v" secondAttribute="centerY" id="ooe-6V-Vie"/>
                     </constraints>

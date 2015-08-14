@@ -310,8 +310,8 @@
  *  拖拽滑块
  */
 - (IBAction)panSlider:(UIPanGestureRecognizer *)sender {
-    // 1.获得拖拽的位置
-    CGPoint point = [sender locationInView:sender.view];
+    // 1.获得拖拽的距离
+    CGPoint point = [sender translationInView:sender.view];
     // 2.设置每次返回的位置都从零开始计算
     [sender setTranslation:CGPointZero inView:sender.view];
     // 3.设置滑块的位置
