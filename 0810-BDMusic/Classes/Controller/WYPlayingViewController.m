@@ -12,6 +12,7 @@
 #import "WYMusicTool.h"
 #import <AVFoundation/AVFoundation.h>
 #import "WYLyricView.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface WYPlayingViewController () <AVAudioPlayerDelegate>
 /** 正在播放的歌曲*/
@@ -209,7 +210,7 @@
 {
     
     // 1.如果正在播放歌曲,直接返回
-    if (self.playingMusic == [WYMusicTool playingMusic]) {
+    if (self.player.isPlaying) {
         [self addCurrenttimeTimer]; //退下的时候销毁了，再上来的时候要添加
         [self addLrcTimer];
         return;
@@ -233,7 +234,60 @@
     [self addLrcTimer];
     // 7.切换歌词
     self.lyricView.lrcname = self.playingMusic.lrcname;
+    // 8.切换锁屏界面的歌曲
+    [self updateLockedScreenMusic];
     
+}
+#pragma mark - 锁频信息控制
+/**
+ *  切换锁屏界面的歌曲 */
+- (void)updateLockedScreenMusic
+{
+    // 1.获得播放器信息中心
+    MPNowPlayingInfoCenter *center = [MPNowPlayingInfoCenter defaultCenter];
+    // 2.切换播放的信息
+    NSMutableDictionary *info = [NSMutableDictionary dictionary];
+    // 歌曲名
+    info[MPMediaItemPropertyTitle] = self.playingMusic.name;
+    // 歌手
+    info[MPMediaItemPropertyArtist] = self.playingMusic.singer;
+    // 当前进度
+    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(self.player.currentTime);
+    // 歌曲总时间
+    info[MPMediaItemPropertyPlaybackDuration] = @(self.player.duration);
+    // 封面
+    info[MPMediaItemPropertyArtwork] = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:self.playingMusic.icon]];
+    center.nowPlayingInfo = info;
+    // 3.称为第一响应者
+    [self becomeFirstResponder];
+    // 4.开始监听远程控制事件
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    switch (event.subtype) {
+        case UIEventSubtypeRemoteControlPlay:  //播放
+        case UIEventSubtypeRemoteControlPause: // 暂停
+            [self playOrPause:self.playOrPauseBtn];
+            break;
+            
+        case UIEventSubtypeRemoteControlNextTrack:  //下一首
+            [self nextMusic];
+            break;
+            
+        case UIEventSubtypeRemoteControlPreviousTrack: //上一首
+            [self previousMusic];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - 私有方法
@@ -320,7 +374,9 @@
     if (self.slider.x < 0) {
         self.slider.x = 0;
     } else if (self.slider.x > sliderMaxX) {
-        self.slider.x = sliderMaxX;
+        //这里减2是为乐不让歌曲直接拖到最后出现从头开始放的bug
+        self.slider.x = sliderMaxX - 2;
+        
     }
     // 4.设置进度条值的位置
     self.progressView.width = self.slider.center.x;
@@ -381,6 +437,8 @@
         //添加定时器
         [self addCurrenttimeTimer];
         [self addLrcTimer];
+        // 刷新锁屏界面
+        [self updateLockedScreenMusic];
     } else if (sender.selected) { //暂停
         sender.selected = NO;
         //暂停

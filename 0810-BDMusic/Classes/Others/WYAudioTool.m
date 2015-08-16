@@ -10,21 +10,28 @@
 
 @implementation WYAudioTool
 
++ (void)initialize
+{
+    
+    //音频会话
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    //设置会话类型（播放类型、模式）自动停止其他播放器
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //激活会话
+    [session setActive:YES error:nil];
+}
+
 /**
  *  存放音效ID
  */
 static NSMutableDictionary *_soundIDs;
 
-+ (void)initialize
++ (NSMutableDictionary *)soundIDs
 {
-    _soundIDs = [NSMutableDictionary dictionary];
-    
-    //音乐会话
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    //设置会话类型（播放类型、模式）自动停止其他播放器
-    [session setCategory:AVAudioSessionCategoryAmbient error:nil];
-    //激活会话
-    [session setActive:YES error:nil];
+    if (!_soundIDs) {
+        _soundIDs = [NSMutableDictionary dictionary];
+    }
+    return _soundIDs;
 }
 /**
  *  播放音效

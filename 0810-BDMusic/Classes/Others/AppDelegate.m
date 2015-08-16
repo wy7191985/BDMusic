@@ -27,7 +27,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // 设置进入后台播放,配置info.plist
-    __block UIBackgroundTaskIdentifier task = [application beginBackgroundTaskWithExpirationHandler:^{
+    UIBackgroundTaskIdentifier task = [application beginBackgroundTaskWithExpirationHandler:^{
         [application endBackgroundTask:task];
     }];
 }
